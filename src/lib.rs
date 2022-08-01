@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-
+//use near_sdk::types::account_id;
 use nanoid::nanoid;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LookupMap, UnorderedMap};
@@ -14,6 +14,7 @@ pub enum StorageKeys {
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
+#[derive(Debug)]
 pub struct Device {
     pub id: String,
     pub metadata: UnorderedMap<String, String>,
@@ -101,6 +102,7 @@ impl Device {
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
+#[derive(Debug)]
 pub struct Registry {
     pub id: String,
     pub devices: LookupMap<String, Device>,
@@ -158,7 +160,7 @@ impl Default for Contract {
 impl Contract {
     /* REGISTRY OPERATIONS */
     pub fn create_registry(&mut self) -> String {
-        let new_registry = Registry::new(env::signer_account_id());
+        let new_registry = Registry::new(env::signer_account_id().to_string());
         self.registries.insert(&new_registry.id, &new_registry);
         new_registry.id
     }
@@ -257,4 +259,40 @@ impl Contract {
         let mut current_device = current_registry.devices.get(&device_id).unwrap();
         current_device.set_metadata_param(param, value)
     }
+}
+
+
+/*-------------------UNIT TESTS -----------------------*/
+
+#[cfg(all(test, not(target_arch = "wasm32")))]
+mod tests {
+    use super::*;
+    use near_sdk::test_utils::VMContextBuilder;
+
+    use near_sdk::{testing_env, VMContext};
+
+    pub fn get_context(input: Vec<u32>,is_view: bool) -> VMContext {
+        VMContextBuilder::new()
+        .   current_account_id(near_sdk::AccountId::new_unchecked("estebancumo4.testnet".to_string()))
+            .signer_account_id("bob_near".parse().unwrap())
+            .is_view(is_view)
+            .build()
+    }
+
+    #[test]
+    //#[result_serializer(borsh)]
+    fn create_registry_test() {
+        let context = get_context(vec![],false);
+        testing_env!(context);
+
+        let mut contract = Contract{
+            
+        };
+        contract.create_registry();
+        println!("Registro {:?} creado con éxito",contract.registries );
+
+   
+         } 
+        // ... Write test here
+    
 }
