@@ -20,5 +20,3 @@ overflow-checks = true
 
 [dependencies]
 near-sdk = "4.0.0"
-nanoid = "0.4.0"
-
