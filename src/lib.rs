@@ -303,13 +303,14 @@ impl Contract {
             return false;
         }
 
-        let current_registry = self.registries.get(&registry_name).unwrap();
+        let mut current_registry = self.registries.get(&registry_name).unwrap();
         if !self.validate_exists_device(&current_registry, device_name.clone()) {
             return false;
         }
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         let aux_map: HashMap<String, String> = serde_json::from_str(&metadata).unwrap();
         current_device.set_metadata(aux_map);
+        current_registry.add_device(current_device);
         true
     }
 
@@ -324,12 +325,13 @@ impl Contract {
             return false;
         }
 
-        let current_registry = self.registries.get(&registry_name).unwrap();
+        let mut current_registry = self.registries.get(&registry_name).unwrap();
         if !self.validate_exists_device(&current_registry, device_name.clone()) {
             return false;
         }
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.set_data_param(param, value);
+        current_registry.add_device(current_device);
         true
     }
 
@@ -344,12 +346,13 @@ impl Contract {
             return false;
         }
 
-        let current_registry = self.registries.get(&registry_name).unwrap();
+        let mut current_registry = self.registries.get(&registry_name).unwrap();
         if !self.validate_exists_device(&current_registry, device_name.clone()) {
             return false;
         }
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.set_metadata_param(param, value);
+        current_registry.add_device(current_device);
         true
     }
 
