@@ -1,8 +1,9 @@
+use std::collections::HashMap;
+
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LookupMap, UnorderedMap};
 use near_sdk::{env, near_bindgen};
 use near_sdk::{serde_json, BorshStorageKey};
-use std::collections::HashMap;
 
 #[derive(BorshStorageKey, BorshSerialize)]
 pub enum StorageKeys {
@@ -34,14 +35,14 @@ impl Default for Device {
 }
 
 impl Device {
-    pub fn new(registry_name: String, name: String, description: String) -> Self {
+    pub fn new(name: String, description: String) -> Self {
         Self {
             description,
             metadata: UnorderedMap::new(StorageKeys::Custom {
-                hash: env::sha256(format!("met_{}_{}", registry_name, name).as_bytes()),
+                hash: env::sha256(format!("met{}", name).as_bytes()),
             }),
             data: UnorderedMap::new(StorageKeys::Custom {
-                hash: env::sha256(format!("dat_{}_{}", registry_name, name).as_bytes()),
+                hash: env::sha256(format!("dat{}", name).as_bytes()),
             }),
             name,
         }
@@ -149,22 +150,10 @@ impl Contract {
     }
 
     /* REGISTRY OPERATIONS */
-    pub fn create_registry(&mut self, registry_name: String) -> bool {
-        if self.validate_exists_registry(registry_name.clone()) {
-            return false;
-        }
-
+    pub fn create_registry(&mut self, registry_name: String) -> String {
         let new_registry = Registry::new(registry_name, env::signer_account_id().to_string());
         self.registries.insert(&new_registry.name, &new_registry);
-        true
-    }
-
-    pub fn delete_registry(&mut self, registry_name: String) -> bool {
-        if !self.validate_owner(registry_name.clone()) {
-            return false;
-        }
-        self.registries.remove(&registry_name);
-        true
+        new_registry.name
     }
 
     /*pub fn get_registry(&self, registry_name: String) -> Registry {
@@ -175,41 +164,14 @@ impl Contract {
     pub fn add_device_to_registry(
         &mut self,
         registry_name: String,
-        device_name: String,
+        name: String,
         description: String,
-    ) -> bool {
-        if !self.validate_registry(registry_name.clone()) {
-            return false;
-        }
-
+    ) {
+        let new_device = Device::new(name, description);
         let mut current_registry = self.registries.get(&registry_name).unwrap();
-        if self.validate_exists_device(&current_registry, device_name.clone()) {
-            return false;
-        }
-
-        let new_device = Device::new(registry_name, device_name, description);
         current_registry
             .devices
             .insert(&new_device.name, &new_device);
-        true
-    }
-
-    pub fn delete_device_from_registry(
-        &mut self,
-        registry_name: String,
-        device_name: String,
-    ) -> bool {
-        if !self.validate_registry(registry_name.clone()) {
-            return false;
-        }
-
-        let mut current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return false;
-        }
-        current_registry.devices.remove(&device_name);
-        self.registries.insert(&registry_name, &current_registry);
-        true
     }
 
     /* DEVICE OPERATIONS */
@@ -220,14 +182,7 @@ impl Contract {
         registry_name: String,
         device_name: String,
     ) -> Vec<(String, String)> {
-        if !self.validate_registry(registry_name.clone()) {
-            return Vec::new();
-        }
-
         let current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return Vec::new();
-        }
         let current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.get_data()
     }
@@ -237,14 +192,7 @@ impl Contract {
         registry_name: String,
         device_name: String,
     ) -> Vec<(String, String)> {
-        if !self.validate_registry(registry_name.clone()) {
-            return Vec::new();
-        }
-
         let current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return Vec::new();
-        }
         let current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.get_metadata()
     }
@@ -255,14 +203,7 @@ impl Contract {
         device_name: String,
         param: String,
     ) -> String {
-        if !self.validate_registry(registry_name.clone()) {
-            return "Not registry or not allowed".to_string();
-        }
-
         let current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return "Not device".to_string();
-        }
         let current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.get_data_param(param)
     }
@@ -273,24 +214,16 @@ impl Contract {
         device_name: String,
         param: String,
     ) -> String {
-        if !self.validate_registry(registry_name.clone()) {
-            return "Not registry or not allowed".to_string();
-        }
-
         let current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return "Not device".to_string();
-        }
         let current_device = current_registry.devices.get(&device_name).unwrap();
         current_device.get_metadata_param(param)
     }
 
     pub fn set_device_data(&self, registry_name: String, device_name: String, data: String) {
-        let mut current_registry = self.registries.get(&registry_name).unwrap();
+        let current_registry = self.registries.get(&registry_name).unwrap();
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         let aux_map: HashMap<String, String> = serde_json::from_str(&data).unwrap();
         current_device.set_data(aux_map);
-        current_registry.add_device(current_device);
     }
 
     pub fn set_device_metadata(
@@ -298,20 +231,11 @@ impl Contract {
         registry_name: String,
         device_name: String,
         metadata: String,
-    ) -> bool {
-        if !self.validate_registry(registry_name.clone()) {
-            return false;
-        }
-
-        let mut current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return false;
-        }
+    ) {
+        let current_registry = self.registries.get(&registry_name).unwrap();
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         let aux_map: HashMap<String, String> = serde_json::from_str(&metadata).unwrap();
         current_device.set_metadata(aux_map);
-        current_registry.add_device(current_device);
-        true
     }
 
     pub fn set_device_data_param(
@@ -320,19 +244,10 @@ impl Contract {
         device_name: String,
         param: String,
         value: String,
-    ) -> bool {
-        if !self.validate_registry(registry_name.clone()) {
-            return false;
-        }
-
-        let mut current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return false;
-        }
+    ) {
+        let current_registry = self.registries.get(&registry_name).unwrap();
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
-        current_device.set_data_param(param, value);
-        current_registry.add_device(current_device);
-        true
+        current_device.set_data_param(param, value)
     }
 
     pub fn set_device_metadata_param(
@@ -341,47 +256,16 @@ impl Contract {
         device_name: String,
         param: String,
         value: String,
-    ) -> bool {
-        if !self.validate_registry(registry_name.clone()) {
-            return false;
-        }
-
-        let mut current_registry = self.registries.get(&registry_name).unwrap();
-        if !self.validate_exists_device(&current_registry, device_name.clone()) {
-            return false;
-        }
+    ) {
+        let current_registry = self.registries.get(&registry_name).unwrap();
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
-        current_device.set_metadata_param(param, value);
-        current_registry.add_device(current_device);
-        true
-    }
-
-    #[private]
-    fn validate_owner(&self, registry_name: String) -> bool {
-        let registry = self.registries.get(&registry_name).unwrap();
-        registry.owner_id == env::signer_account_id().to_string()
-    }
-
-    #[private]
-    fn validate_exists_registry(&self, registry_name: String) -> bool {
-        self.registries.get(&registry_name).is_some()
-    }
-
-    #[private]
-    fn validate_registry(&self, registry_name: String) -> bool {
-        self.validate_exists_registry(registry_name.clone())
-            && self.validate_owner(registry_name.clone())
-    }
-
-    #[private]
-    fn validate_exists_device(&self, registry: &Registry, device_name: String) -> bool {
-        registry.devices.get(&device_name).is_some()
+        current_device.set_metadata_param(param, value)
     }
 }
 
 /*-------------------UNIT TESTS -----------------------*/
 
-/*
+
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
@@ -389,26 +273,106 @@ mod tests {
 
     use near_sdk::{testing_env, VMContext};
 
-    pub fn get_context(input: Vec<u32>, is_view: bool) -> VMContext {
+    pub fn get_context(is_view: bool) -> VMContext {
         VMContextBuilder::new()
-            .current_account_id(near_sdk::AccountId::new_unchecked(
-                "estebancumo4.testnet".to_string(),
-            ))
+            
             .signer_account_id("bob_near".parse().unwrap())
             .is_view(is_view)
             .build()
     }
 
     #[test]
-    //#[result_serializer(borsh)]
-    fn create_registry_test() {
-        let context = get_context(vec![], false);
+    fn unit_test() {
+        let context = get_context( false);
         testing_env!(context);
 
-        let mut contract = Contract {};
-        contract.create_registry();
-        println!("Registro {:?} creado con éxito", contract.registries);
+        let mut contract = Contract::new();
+
+        let new_registry = contract.create_registry("Garden".to_string());
+
+        assert_eq!(new_registry, "Garden".to_string());
+        assert!(contract.registries.get(&"Garden".to_string()).is_some());
+        
+
+// Add device to registry
+       contract.add_device_to_registry(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            "Temperature sensor for Eastside Area 1".to_string(),
+        );
+        let new_device= contract.registries.get(
+            &"Garden".to_string()).unwrap().devices.get(&"Temp 1".to_string()).unwrap();
+
+        //is_some
+        assert_eq!(new_device.name,"Temp 1".to_string());
+        assert_eq!(new_device.description,"Temperature sensor for Eastside Area 1".to_string());
+
+//set_device_data
+
+let _key:String ="temperature".to_string();
+let _value:String ="25 C°".to_string(); 
+       contract.set_device_data(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            format!(r#"{{"{}":"{}"}}"#,_key,_value),
+        );
+
+
+       
+        let new_device_data= contract.registries.get(
+                &"Garden".to_string()).unwrap().devices.get(&"Temp 1".to_string()).unwrap();
+       
+       assert_eq!(new_device_data.data.get(&_key).unwrap(),_value);
+
+       //assert_eq!(new_device_data,"25 C°".to_string());
+
+
+//get device data
+
+       contract.get_device_data(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+        );
+
+        let get_current_device_data= contract.registries.get(
+                &"Garden".to_string()).unwrap().devices.get(
+                &"Temp 1".to_string()).unwrap().data;
+
+
+            assert_eq!(get_current_device_data.get(&_key).unwrap(),_value);
+
+//Set device metadata
+
+//         contract.set_device_metadata(
+//             "Garden".to_string(),
+//             "Temp 1".to_string(),
+//             "{\"location\":\"Eastside Area 1\"}".to_string(),
+//         );
+
+//         let new_device_metadata= contract.registries.get(
+//                 &"Garden".to_string()).unwrap().devices.get(
+//                 &"Temp 1".to_string()).unwrap().metadata.get(
+//                 &"location".to_string()).unwrap();
+
+//         assert!(new_device_metadata.contains("Eastside Area 1"));
+
+
+// //get device metadata
+//         contract.get_device_metadata(
+//             "Garden".to_string(),
+//             "Temp 1".to_string(),
+//         );
+
+//         let get_current_device_metadata= contract.registries.get(
+//                 &"Garden".to_string()).unwrap().devices.get(
+//                 &"Temp 1".to_string()).unwrap().metadata;
+
+//             assert!(get_current_device_metadata.get(&"location".to_string()).unwrap().contains("Eastside Area 1"));
+//             println!("{:?}",get_current_device_metadata.get(&"location".to_string()).unwrap());
+        
     }
-    // ... Write test here
+    
+   
+    
+   
 }
-*/
