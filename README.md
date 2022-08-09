@@ -79,17 +79,17 @@ export CONTRACT_ACCOUNT_ID = <ID in .env file>
 ```
 
 
-## Create a registry for a device group.
+### Create a registry for a device group.
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID create_registry '{"registry name":"REGISTRY_NAME"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Add a device to an existing registry
+### Add a device to an existing registry
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID add_device_to_registry '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","description":"DESCRIPTION"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Set device data 
+### Set device data 
 
 *It is important to know that **data** is an **UnorderedMap** so you can input as many key/value items in it without worrying about order.*
 
@@ -97,49 +97,49 @@ near call $CONTRACT_ACCOUNT_ID add_device_to_registry '{"registry_name":"REGISTR
 near call $CONTRACT_ACCOUNT_ID set_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","data":{"{}":"{}"}}' --acoountId OWNER_ACCOUNT_ID
 ```
 
-## Get device data
+### Get device data
 
 ```bash
 near view $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Set device data parmeter 
+### Set device data parmeter 
 
 *It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER","value":"VALUE"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Get device data parameter
+### Get device data parameter
 
 ```bash
 near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Set device metadata 
+### Set device metadata 
 
 *It is important to know that **metadata** is an **UnorderedMap** so you can input as many key/value items in it without worrying about order.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","metadata":{"{}":"{}"}}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Get device metadata
+### Get device metadata
 
 ```bash
 near view $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Set device metadata parmeter 
+### Set device metadata parmeter 
 
 *It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_metadata_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER","value":"VALUE"}' --acoountId OWNER_ACCOUNT_ID
 ```
-## Get device metadata parameter
+### Get device metadata parameter
 
 ```bash
 near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER"}' --acoountId OWNER_ACCOUNT_ID
 ```
 
-## Unit test
+### Unit test
 
 To run tests, run the following command 
 ```bash
@@ -147,5 +147,11 @@ cargo test
   ```
 *Or go to the test code in lib.rs and press *Run test* if using vs code.*
 
-## Example
+## Examples
 
+### Creating a new registry
+
+```bash
+near call $CONTRACT_ACCOUNT_ID create_registry '{"registry name":"GARDEN"}' --acoountId OWNER_ACCOUNT_ID
+```
+![NewRegistry,1st function](assets/images/Screenshot%20from%202022-08-09%2013-52-16.png)
