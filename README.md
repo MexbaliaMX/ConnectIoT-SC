@@ -63,14 +63,14 @@ you can check the contract ID in the .env file.*
 
 To deploy this smart contract run
 ```bash
-cargo run
+near dev-deploy ./target/wasm32-unknown-unknown/release/connect_iot.wasm
 ```
 
 
-## Trying ConnectIoT
+# Trying ConnectIoT
 
-Before using the smart contract, for a better and easy usage you can set an envorionment variable 
-for CONTRACT_ACCOUNT_ID.
+*Before using the smart contract, for a better and easy usage you can set an **envorionment variable** 
+for **CONTRACT_ACCOUNT_ID**.*
 
 ### Environment variable
 
@@ -79,24 +79,73 @@ export CONTRACT_ACCOUNT_ID = <ID in .env file>
 ```
 
 
-Create a registry for a device group.
+## Create a registry for a device group.
 
 ```bash
-near call $CONTACT_ACCOUNT_ID create_registry {'"registry name":"Garden"'} --acoountId OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID create_registry '{"registry name":"REGISTRY_NAME"}' --acoountId OWNER_ACCOUNT_ID
 ```
-Add a device to an existing registry
+## Add a device to an existing registry
 
 ```bash
-near call $CONTACT_ACCOUNT_ID add_device_to_registry {'"registry name":"Garden","device_name":"Temperature 1","description":"Thermometer in zone 1"'} --acoountId OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID add_device_to_registry '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","description":"DESCRIPTION"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Set device data 
+
+*It is important to know that **data** is an **UnorderedMap** so you can input as many key/value items in it without worrying about order.*
+
+```bash
+near call $CONTRACT_ACCOUNT_ID set_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","data":{"{}":"{}"}}' --acoountId OWNER_ACCOUNT_ID
 ```
 
+## Get device data
 
+```bash
+near view $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Set device data parmeter 
 
+*It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
 
-### Unit test
+```bash
+near call $CONTRACT_ACCOUNT_ID set_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER","value":"VALUE"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Get device data parameter
 
-To run tests, run the following command
+```bash
+near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Set device metadata 
 
+*It is important to know that **metadata** is an **UnorderedMap** so you can input as many key/value items in it without worrying about order.*
+
+```bash
+near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","metadata":{"{}":"{}"}}' --acoountId OWNER_ACCOUNT_ID
+```
+## Get device metadata
+
+```bash
+near view $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Set device metadata parmeter 
+
+*It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
+
+```bash
+near call $CONTRACT_ACCOUNT_ID set_device_metadata_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER","value":"VALUE"}' --acoountId OWNER_ACCOUNT_ID
+```
+## Get device metadata parameter
+
+```bash
+near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER"}' --acoountId OWNER_ACCOUNT_ID
+```
+
+## Unit test
+
+To run tests, run the following command 
 ```bash
 cargo test 
   ```
+*Or go to the test code in lib.rs and press *Run test* if using vs code.*
+
+## Example
+
