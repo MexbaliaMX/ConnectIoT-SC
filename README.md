@@ -107,7 +107,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_data '{"registry_name":"REGISTRY_NAME"
 ### Get device data
 
 ```bash
-near view $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
 ```
 ### Set device data parmeter 
 
@@ -119,7 +119,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_data_param '{"registry_name":"REGISTRY
 ### Get device data parameter
 
 ```bash
-near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER"}' --accountId $OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER"}' --accountId $OWNER_ACCOUNT_ID
 ```
 ### Set device metadata 
 
@@ -131,7 +131,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"REGISTRY_N
 ### Get device metadata
 
 ```bash
-near view $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
 ```
 ### Set device metadata parmeter 
 
@@ -143,7 +143,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata_param '{"registry_name":"REGI
 ### Get device metadata parameter
 
 ```bash
-near view $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER"}' --accountId $OWNER_ACCOUNT_ID
+near call $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER"}' --accountId $OWNER_ACCOUNT_ID
 ```
 
 ### Unit test
@@ -173,6 +173,7 @@ https://explorer.testnet.near.org/transactions/3tLWruvx3YGHBKuNVZBXspk1PBoryizMu
 near call $CONTRACT_ACCOUNT_ID add_device_to_registry '{"registry_name":"my_registry","device_name":"my_device","description":"Temperature"}' --accountId $OWNER_ACCOUNT_ID
 ```
 ![Add New Device, 2nd function](assets/images/Screenshot%20from%202022-08-09%2016-52-59.png)
+
 *You can check this transaction and its details at the Near Testnet Explorer.*
 https://explorer.testnet.near.org/transactions/24hztKUH7YW6Xpw8HiT55uqSyqfSzYaszS41A4WzWwso
 
@@ -196,14 +197,20 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"my_registr
 *You can check this transaction and its details at the Near Testnet Explorer.*
 https://explorer.testnet.near.org/transactions/AVrMu5s4JtwbT8c2tj8FXCYmyFqsBCi4VhCWebYRACS6
 
+### Getting device data
+```bash
+near call $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"my_registry","device_name":"my_device"}' --accountId $OWNER_ACCOUNT_ID
+```
+![Get Device Data, 5th function](assets/images/Screenshot%20from%202022-08-10%2012-39-47.png)
+
+*You can check this transaction and its details at the Near Testnet Explorer.*
+https://explorer.testnet.near.org/transactions/DJMaTHFopcrGkWQW765Y8eceTbwPo6K58MFKBNyLhhfQ
 ## Credits
 <center>
 
-[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
+>[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
 
-[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)
-
-</center>
+>[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)</center>
 
 ## Support
 
