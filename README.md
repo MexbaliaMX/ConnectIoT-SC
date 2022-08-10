@@ -5,9 +5,11 @@
 [![Mexbalia](https://img.shields.io/badge/-near--sdk--rs-orange)](https://www.near-sdk.io/)
 
 #### Access services **Smart Contract** which allows creating the **connection** between **IoT** devices and the **Near Protocol Blockchain**.
+<center>
 
 ![Arq,use](assets/images/Screenshot%20from%202022-08-10%2010-16-12.png)
 
+</center>
 ### Features
 
 - Create a registry for a device group
@@ -194,11 +196,11 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"my_registr
 https://explorer.testnet.near.org/transactions/AVrMu5s4JtwbT8c2tj8FXCYmyFqsBCi4VhCWebYRACS6
 
 ## Credits
+<center>
 
-> [![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
+[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)
 
-> [![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)
-
+</center>
 ## Support
 
 Reach out via [website](https://mexbalia.com/contact/) or [profile adresses](https://github.com/paul-cruz)
