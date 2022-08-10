@@ -10,6 +10,7 @@
 ![Arq,use](assets/images/Screenshot%20from%202022-08-10%2010-16-12.png)
 
 </center>
+
 ### Features
 
 - Create a registry for a device group
@@ -198,9 +199,11 @@ https://explorer.testnet.near.org/transactions/AVrMu5s4JtwbT8c2tj8FXCYmyFqsBCi4V
 ## Credits
 <center>
 
-[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)
+[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
+[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)
 
 </center>
+
 ## Support
 
 Reach out via [website](https://mexbalia.com/contact/) or [profile adresses](https://github.com/paul-cruz)
