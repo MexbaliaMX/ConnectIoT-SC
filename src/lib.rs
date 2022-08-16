@@ -381,7 +381,6 @@ impl Contract {
 
 /*-------------------UNIT TESTS -----------------------*/
 
-/*
 #[cfg(all(test, not(target_arch = "wasm32")))]
 mod tests {
     use super::*;
@@ -389,26 +388,109 @@ mod tests {
 
     use near_sdk::{testing_env, VMContext};
 
-    pub fn get_context(input: Vec<u32>, is_view: bool) -> VMContext {
+    pub fn get_context(is_view: bool) -> VMContext {
         VMContextBuilder::new()
-            .current_account_id(near_sdk::AccountId::new_unchecked(
-                "estebancumo4.testnet".to_string(),
-            ))
             .signer_account_id("bob_near".parse().unwrap())
             .is_view(is_view)
             .build()
     }
 
     #[test]
-    //#[result_serializer(borsh)]
-    fn create_registry_test() {
-        let context = get_context(vec![], false);
+    fn unit_test() {
+        let context = get_context(false);
         testing_env!(context);
 
-        let mut contract = Contract {};
-        contract.create_registry();
-        println!("Registro {:?} creado con éxito", contract.registries);
+        let mut contract = Contract::new();
+
+        let new_registry = contract.create_registry("Garden".to_string());
+
+        assert_eq!(new_registry, true);
+        assert!(contract.registries.get(&"Garden".to_string()).is_some());
+
+        // Add device to registry
+        contract.add_device_to_registry(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            "Temperature sensor for Eastside Area 1".to_string(),
+        );
+        let new_device = contract
+            .registries
+            .get(&"Garden".to_string())
+            .unwrap()
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap();
+
+        //is_some
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+            new_device.description,
+            "Temperature sensor for Eastside Area 1".to_string()
+        );
+
+        //set_device_data
+
+        let _key: String = "temperature".to_string();
+        let _value: String = "25 C°".to_string();
+        contract.set_device_data(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            format!(r#"{{"{}":"{}"}}"#, _key, _value),
+        );
+
+        let new_device_data = contract
+            .registries
+            .get(&"Garden".to_string())
+            .unwrap()
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap();
+
+        assert_eq!(new_device_data.data.get(&_key).unwrap(), _value);
+
+        //assert_eq!(new_device_data,"25 C°".to_string());
+
+        //get device data
+
+        contract.get_device_data("Garden".to_string(), "Temp 1".to_string());
+
+        let get_current_device_data = contract
+            .registries
+            .get(&"Garden".to_string())
+            .unwrap()
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap()
+            .data;
+
+        assert_eq!(get_current_device_data.get(&_key).unwrap(), _value);
+
+        //Set device metadata
+
+        //         contract.set_device_metadata(
+        //             "Garden".to_string(),
+        //             "Temp 1".to_string(),
+        //             "{\"location\":\"Eastside Area 1\"}".to_string(),
+        //         );
+
+        //         let new_device_metadata= contract.registries.get(
+        //                 &"Garden".to_string()).unwrap().devices.get(
+        //                 &"Temp 1".to_string()).unwrap().metadata.get(
+        //                 &"location".to_string()).unwrap();
+
+        //         assert!(new_device_metadata.contains("Eastside Area 1"));
+
+        // //get device metadata
+        //         contract.get_device_metadata(
+        //             "Garden".to_string(),
+        //             "Temp 1".to_string(),
+        //         );
+
+        //         let get_current_device_metadata= contract.registries.get(
+        //                 &"Garden".to_string()).unwrap().devices.get(
+        //                 &"Temp 1".to_string()).unwrap().metadata;
+
+        //             assert!(get_current_device_metadata.get(&"location".to_string()).unwrap().contains("Eastside Area 1"));
+        //             println!("{:?}",get_current_device_metadata.get(&"location".to_string()).unwrap());
     }
-    // ... Write test here
 }
-*/
