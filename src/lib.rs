@@ -167,9 +167,8 @@ impl Contract {
         true
     }
 
-    /*pub fn get_registry(&self, registry_name: String) -> Registry {
-        let current_registry = self.registries.get(&registry_name);
-        current_registry.unwrap_or_default()
+    /*pub fn get_registries(&self) -> Vec<String>{
+        self.registries.keys_as_vector()
     }*/
 
     pub fn add_device_to_registry(
@@ -214,7 +213,6 @@ impl Contract {
 
     /* DEVICE OPERATIONS */
 
-    // near view get_device_data '{registry_name: "dispositivos", device_id: "foco 1"}'
     pub fn get_device_data(
         &self,
         registry_name: String,
@@ -285,19 +283,32 @@ impl Contract {
         current_device.get_metadata_param(param)
     }
 
-    pub fn set_device_data(&self, registry_name: String, device_name: String, data: String) {
+    pub fn set_device_data(
+        &self,
+        registry_name: String,
+        device_name: String,
+        data: String
+    ) -> bool{
+        if !self.validate_registry(registry_name.clone()) {
+            return false;
+        }
+
         let mut current_registry = self.registries.get(&registry_name).unwrap();
+        if !self.validate_exists_device(&current_registry, device_name.clone()) {
+            return false;
+        }
         let mut current_device = current_registry.devices.get(&device_name).unwrap();
         let aux_map: HashMap<String, String> = serde_json::from_str(&data).unwrap();
         current_device.set_data(aux_map);
         current_registry.add_device(current_device);
+        true
     }
 
     pub fn set_device_metadata(
         &self,
         registry_name: String,
         device_name: String,
-        metadata: String,
+        metadata: String
     ) -> bool {
         if !self.validate_registry(registry_name.clone()) {
             return false;
