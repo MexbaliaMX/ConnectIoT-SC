@@ -1,8 +1,13 @@
 # **ConnectIoT**
+<center>
+
+![Arq,use](assets/images/Morado%20Moderno%20Tecnolog%C3%ADa%20y%20Juegos%20Logotipo%20(1).png)
 
 [![Mexbalia](https://img.shields.io/badge/Mexbalia-ConnectIoT%20Smart%20Contract-blue)](https://mexbalia.com/connect-iot/)
 [![Mexbalia](https://img.shields.io/badge/-Near%20Protocol-9cf)](https://near.org/)
 [![Mexbalia](https://img.shields.io/badge/-near--sdk--rs-orange)](https://www.near-sdk.io/)
+
+</center>
 
 #### Access services **Smart Contract** which allows creating the **connection** between **IoT** devices and the **Near Protocol Blockchain**.
 <center>
