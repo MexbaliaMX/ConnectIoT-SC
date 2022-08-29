@@ -27,8 +27,7 @@
 1. Install rustup
 
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
 ```
 
 *Visit https://www.rust-lang.org/tools/install for more info.*
@@ -63,10 +62,8 @@ cargo build --target wasm32-unknown-unknown --release
 
 ---
 ### Deployment
-*This is optional, the smart contract is already deployed
-you can check the contract ID in the .env file.*
-
-To deploy this smart contract run
+*You can check the contract ID in the .env file.*
+To deploy this smart contract run:
 ```bash
 near dev-deploy ./target/wasm32-unknown-unknown/release/connect_iot.wasm
 ```
