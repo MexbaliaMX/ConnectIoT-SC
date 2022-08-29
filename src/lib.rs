@@ -406,19 +406,52 @@ mod tests {
             .build()
     }
 
+    pub fn create_registry_for_test(registry_name: String) -> Contract {
+        let _context = get_context(false);
+        let mut contract = Contract::new();
+        let _new_registry = contract.create_registry(registry_name);
+        return contract;
+    }
+
+    pub fn create_device_for_test(
+        registry_name: String,
+        device_name: String,
+        description: String
+    ) -> Contract {
+        let mut contract = create_registry_for_test(registry_name.to_string());
+        contract.add_device_to_registry(
+            registry_name.to_string(),
+            device_name.to_string(),
+            description.to_string(),
+        );
+        return contract;
+    }
+
     #[test]
-    fn unit_test() {
+    fn create_registry_test(){
         let context = get_context(false);
         testing_env!(context);
 
         let mut contract = Contract::new();
-
         let new_registry = contract.create_registry("Garden".to_string());
 
         assert_eq!(new_registry, true);
         assert!(contract.registries.get(&"Garden".to_string()).is_some());
+    }
 
-        // Add device to registry
+    #[test]
+    fn delete_registry_test(){
+        let mut contract = create_registry_for_test("Garden".to_string());
+        assert!(contract.registries.get(&"Garden".to_string()).is_some());
+        assert!(contract.delete_registry("Garden".to_string()));
+        assert!(contract.registries.get(&"Garden".to_string()).is_none());
+    }
+
+    #[test]
+    fn add_device_to_registry_test(){
+        let mut contract = create_registry_for_test("Garden".to_string());
+        assert!(contract.registries.get(&"Garden".to_string()).is_some());
+        
         contract.add_device_to_registry(
             "Garden".to_string(),
             "Temp 1".to_string(),
@@ -438,70 +471,115 @@ mod tests {
             new_device.description,
             "Temperature sensor for Eastside Area 1".to_string()
         );
+    }
 
-        //set_device_data
-
-        let _key: String = "temperature".to_string();
-        let _value: String = "25 C°".to_string();
-        contract.set_device_data(
-            "Garden".to_string(),
-            "Temp 1".to_string(),
-            format!(r#"{{"{}":"{}"}}"#, _key, _value),
-        );
-
-        let new_device_data = contract
+    #[test]
+    fn delete_device_from_registry_test(){
+        let mut contract = create_device_for_test("Garden".to_string(), "Temp 1".to_string(), "Temperature sensor for Eastside Area 1".to_string());
+        let new_device = contract
             .registries
             .get(&"Garden".to_string())
             .unwrap()
             .devices
             .get(&"Temp 1".to_string())
             .unwrap();
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+                new_device.description,
+                "Temperature sensor for Eastside Area 1".to_string()
+            );
+        assert!(contract.delete_device_from_registry("Garden".to_string(), "Temp 1".to_string()));
+    }
 
-        assert_eq!(new_device_data.data.get(&_key).unwrap(), _value);
-
-        //assert_eq!(new_device_data,"25 C°".to_string());
-
-        //get device data
-
-        contract.get_device_data("Garden".to_string(), "Temp 1".to_string());
-
-        let get_current_device_data = contract
+    #[test]
+    fn set_and_get_device_data_test(){
+        let contract = create_device_for_test("Garden".to_string(), "Temp 1".to_string(), "Temperature sensor for Eastside Area 1".to_string());
+        let new_device = contract
             .registries
             .get(&"Garden".to_string())
             .unwrap()
             .devices
             .get(&"Temp 1".to_string())
+            .unwrap();
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+                new_device.description,
+                "Temperature sensor for Eastside Area 1".to_string()
+            );
+        let _key: String = "Temperature".to_string();
+        let _value: String = "25 C°".to_string();
+        assert!(contract.set_device_data(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            format!(r#"{{"{}":"{}"}}"#, _key, _value),
+        ));
+        let device_data = contract.get_device_data("Garden".to_string(), "Temp 1".to_string());
+        assert!(!device_data.is_empty());
+        assert!(device_data.contains(&("Temperature".to_string(),"25 C°".to_string())));
+    }
+
+    #[test]
+    fn set_and_get_device_data_param_test(){
+        let contract = create_device_for_test("Garden".to_string(), "Temp 1".to_string(), "Temperature sensor for Eastside Area 1".to_string());
+        let new_device = contract
+            .registries
+            .get(&"Garden".to_string())
             .unwrap()
-            .data;
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap();
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+                new_device.description,
+                "Temperature sensor for Eastside Area 1".to_string()
+            );
+        assert!(contract.set_device_data_param("Garden".to_string(), "Temp 1".to_string(), "Temperature".to_string(), "25 C°".to_string()));
+        assert_eq!(contract.get_device_data_param("Garden".to_string(), "Temp 1".to_string(), "Temperature".to_string()), "25 C°".to_string());
+    }
+    
+    #[test]
+    fn set_and_get_device_metatdata_test(){
+        let contract = create_device_for_test("Garden".to_string(), "Temp 1".to_string(), "Temperature sensor for Eastside Area 1".to_string());
+        let new_device = contract
+            .registries
+            .get(&"Garden".to_string())
+            .unwrap()
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap();
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+                new_device.description,
+                "Temperature sensor for Eastside Area 1".to_string()
+            );
+        let _key: String = "Battery level".to_string();
+        let _value: String = "87 %".to_string();
+        assert!(contract.set_device_metadata(
+            "Garden".to_string(),
+            "Temp 1".to_string(),
+            format!(r#"{{"{}":"{}"}}"#, _key, _value),
+        ));
+        let device_metadata = contract.get_device_metadata("Garden".to_string(), "Temp 1".to_string());
+        assert!(!device_metadata.is_empty());
+        assert!(device_metadata.contains(&("Battery level".to_string(),"87 %".to_string())));
+    }
 
-        assert_eq!(get_current_device_data.get(&_key).unwrap(), _value);
-
-        //Set device metadata
-
-        //         contract.set_device_metadata(
-        //             "Garden".to_string(),
-        //             "Temp 1".to_string(),
-        //             "{\"location\":\"Eastside Area 1\"}".to_string(),
-        //         );
-
-        //         let new_device_metadata= contract.registries.get(
-        //                 &"Garden".to_string()).unwrap().devices.get(
-        //                 &"Temp 1".to_string()).unwrap().metadata.get(
-        //                 &"location".to_string()).unwrap();
-
-        //         assert!(new_device_metadata.contains("Eastside Area 1"));
-
-        // //get device metadata
-        //         contract.get_device_metadata(
-        //             "Garden".to_string(),
-        //             "Temp 1".to_string(),
-        //         );
-
-        //         let get_current_device_metadata= contract.registries.get(
-        //                 &"Garden".to_string()).unwrap().devices.get(
-        //                 &"Temp 1".to_string()).unwrap().metadata;
-
-        //             assert!(get_current_device_metadata.get(&"location".to_string()).unwrap().contains("Eastside Area 1"));
-        //             println!("{:?}",get_current_device_metadata.get(&"location".to_string()).unwrap());
+    #[test]
+    fn set_and_get_device_metadata_param_test(){
+        let contract = create_device_for_test("Garden".to_string(), "Temp 1".to_string(), "Temperature sensor for Eastside Area 1".to_string());
+        let new_device = contract
+            .registries
+            .get(&"Garden".to_string())
+            .unwrap()
+            .devices
+            .get(&"Temp 1".to_string())
+            .unwrap();
+        assert_eq!(new_device.name, "Temp 1".to_string());
+        assert_eq!(
+                new_device.description,
+                "Temperature sensor for Eastside Area 1".to_string()
+            );
+        assert!(contract.set_device_metadata_param("Garden".to_string(), "Temp 1".to_string(), "Battery level".to_string(), "87 %".to_string()));
+        assert_eq!(contract.get_device_metadata_param("Garden".to_string(), "Temp 1".to_string(), "Battery level".to_string()), "87 %".to_string());
     }
 }
