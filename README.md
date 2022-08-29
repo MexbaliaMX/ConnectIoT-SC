@@ -11,6 +11,7 @@
 
 </center>
 
+---
 ### Features
 
 - Create a registry for a device group
@@ -60,7 +61,7 @@ cd Connect-IoT
 cargo build --target wasm32-unknown-unknown --release
 ```
 
-
+---
 ### Deployment
 *This is optional, the smart contract is already deployed
 you can check the contract ID in the .env file.*
@@ -109,7 +110,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_data '{"registry_name":"REGISTRY_NAME"
 ```bash
 near call $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
 ```
-### Set device data parmeter 
+### Set device data parameter 
 
 *It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
 
@@ -133,7 +134,7 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"REGISTRY_N
 ```bash
 near call $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME"}' --accountId $OWNER_ACCOUNT_ID
 ```
-### Set device metadata parmeter 
+### Set device metadata parameter 
 
 *It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
 
@@ -145,8 +146,8 @@ near call $CONTRACT_ACCOUNT_ID set_device_metadata_param '{"registry_name":"REGI
 ```bash
 near call $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER"}' --accountId $OWNER_ACCOUNT_ID
 ```
-
-### Unit test
+---
+## Unit test
 
 To run tests, run the following command 
 ```bash
@@ -154,6 +155,7 @@ cargo test
   ```
 *Or go to the test code in lib.rs and press *Run test* if using vs code.*
 
+---
 ## Examples
 
 
@@ -205,13 +207,17 @@ near call $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"my_registry","
 
 *You can check this transaction and its details at the Near Testnet Explorer.*
 https://explorer.testnet.near.org/transactions/DJMaTHFopcrGkWQW765Y8eceTbwPo6K58MFKBNyLhhfQ
+
+---
 ## Credits
 <center>
 
->[![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
+>
+  [![Logo Mexbalia](assets/images/Screenshot%20from%202022-08-10%2010-41-59.png)](https://mexbalia.com/)
 
->[![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)</center>
+  [![Logo Near Foundation](assets/images/Screenshot%20from%202022-08-10%2010-38-58.png)](https://near.foundation/)</center>
 
+---
 ## Support
 
-Reach out via [website](https://mexbalia.com/contact/) or [profile adresses](https://github.com/paul-cruz)
+Reach out via [website](https://mexbalia.com/contact/) or send an email to [info@mexbalia.com](https://google.com)
