@@ -42,7 +42,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 3. Install Near-CLI
 
 ```bash
-npm i near-cli
+npm i -g near-cli
  ```
 4. Crate a Near testnet account in  (https://wallet.testnet.near.org/)
 5. Account access
@@ -53,7 +53,7 @@ near login
 6. Clone the project
 
 ```bash
-git clone https://github.com/EbanCuMo/Connect-IoT.git
+git clone https://github.com/paul-cruz/ConnectIoT.git
 ```
 7. Go to the project directory
 
