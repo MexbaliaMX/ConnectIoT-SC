@@ -35,6 +35,11 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
 ```
 
+* Add wasm target to your toolchain:
+```bash
+rustup target add wasm32-unknown-unknown
+```
+
 *Visit https://www.rust-lang.org/tools/install for more info.*
 
 2. Install node.js >=12 (https://nodejs.org)
