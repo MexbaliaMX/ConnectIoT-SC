@@ -35,6 +35,8 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh 
 ```
 
+* Restart the terminal
+
 * Add wasm target to your toolchain:
 ```bash
 rustup target add wasm32-unknown-unknown
@@ -42,7 +44,7 @@ rustup target add wasm32-unknown-unknown
 
 *Visit https://www.rust-lang.org/tools/install for more info.*
 
-2. Install node.js >=12 (https://nodejs.org)
+2. Install node.js version>=12 (https://nodejs.org/es/download/package-manager/)
    
 3. Install Near-CLI
 
@@ -50,22 +52,44 @@ rustup target add wasm32-unknown-unknown
 npm i -g near-cli
  ```
 4. Crate a Near testnet account in  (https://wallet.testnet.near.org/)
+
 5. Account access
 
 ```bash
 near login
   ```
-6. Clone the project
+  
+6. Install git
+
+```bash
+sudo apt install git
+  ```
+  
+7. Clone the project
 
 ```bash
 git clone https://github.com/paul-cruz/ConnectIoT.git
 ```
-7. Go to the project directory
+
+8. Go to the project directory
 
 ```bash
 cd Connect-IoT
 ```
-8. Compile release version
+
+9. Install libsqlite3-dev
+
+```bash
+sudo apt install libsqlite3-dev
+  ```
+  
+10. Install build-essential
+
+```bash
+sudo apt install build-essential
+  ```
+  
+11. Compile release version
 ```bash
 cargo build --target wasm32-unknown-unknown --release
 ```
@@ -87,11 +111,11 @@ for **CONTRACT_ACCOUNT_ID** and **OWNER_ACCOUNT_ID**.*
 ### Environment variables
 
 ```bash
-export CONTRACT_ACCOUNT_ID = <ID in .env file>
+export CONTRACT_ACCOUNT_ID=<ID in .env file>
 ```
 *Your OWNER_ACCOUNT_ID is your testnet account*
 ```bash
-export OWNER_ACCOUNT_ID = <example.testnet> 
+export OWNER_ACCOUNT_ID=<example.testnet> 
 ```
 
 ### Create a registry for a device group.
