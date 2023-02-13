@@ -9,7 +9,7 @@
 
 </center>
 
-#### Access services **Smart Contract** which allows creating the **connection** between **IoT** devices and the **Near Protocol Blockchain**.
+#### Access services **Smart Contract**, which allows creating the **connection** between **IoT** devices and the **Near Protocol Blockchain**.
 <center>
 
 ![Arq,use](assets/images/Screenshot%20from%202022-08-10%2010-16-12.png)
@@ -23,11 +23,11 @@
 - Add device to registry
 - Set/Get device data
 - Set/Get device metadata
-- Set/Get device data parmeters
-- Set/Get device metadata parmeters
+- Set/Get device data parameters
+- Set/Get device metadata parameters
 
 
-### Prerequesites
+### Prerequisites
 
 1. Install rustup
 
@@ -37,7 +37,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 * Restart the terminal
 
-* Add wasm target to your toolchain:
+* Add wasm target to your tool chain:
 ```bash
 rustup target add wasm32-unknown-unknown
 ```
@@ -51,7 +51,7 @@ rustup target add wasm32-unknown-unknown
 ```bash
 npm i -g near-cli
  ```
-4. Crate a Near testnet account in  (https://wallet.testnet.near.org/)
+4. Create a Near testnet account in  (https://wallet.testnet.near.org/)
 
 5. Account access
 
@@ -97,7 +97,7 @@ cargo build --target wasm32-unknown-unknown --release
 ---
 ### Deployment
 *You can check the contract ID in the .env file.*
-To deploy this smart contract run:
+To deploy this smart contract, run:
 ```bash
 near dev-deploy ./target/wasm32-unknown-unknown/release/connect_iot.wasm
 ```
@@ -105,7 +105,7 @@ near dev-deploy ./target/wasm32-unknown-unknown/release/connect_iot.wasm
 
 # Trying ConnectIoT
 
-*Before using the smart contract, for a better and easy usage you can set an **envorionment variables** 
+*Before using the smart contract, for a better and easy usage, you can set **environment variables** 
 for **CONTRACT_ACCOUNT_ID** and **OWNER_ACCOUNT_ID**.*
 
 ### Environment variables
@@ -130,7 +130,7 @@ near call $CONTRACT_ACCOUNT_ID add_device_to_registry '{"registry_name":"REGISTR
 ```
 ### Set device data 
 
-*It is important to know that **data** is an **UnorderedMap** so you can input as many key/value items in it.*
+*It is important to know that **data** is an **Unordered Map**, so you can input as many key/value items in it.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_data '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","data":"{\"\":\"\"}"}' --accountId $OWNER_ACCOUNT_ID
@@ -143,7 +143,7 @@ near call $CONTRACT_ACCOUNT_ID get_device_data '{"registry_name":"REGISTRY_NAME"
 ```
 ### Set device data parameter 
 
-*It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
+*It is important to know that **parameter and value** are **Strings**, so you can only input a parameter & value per function call.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_data_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"DATA_PARAMETER","value":"VALUE"}' --accountId $OWNER_ACCOUNT_ID
@@ -155,7 +155,7 @@ near call $CONTRACT_ACCOUNT_ID get_device_data_param '{"registry_name":"REGISTRY
 ```
 ### Set device metadata 
 
-*It is important to know that **metadata** is an **UnorderedMap** so you can input as many key/value items.*
+*It is important to know that **metadata** is an **Unordered Map**, so you can input as many key/value items.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_metadata '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","metadata":{"{}":"{}"}}' --accountId $OWNER_ACCOUNT_ID
@@ -167,7 +167,7 @@ near call $CONTRACT_ACCOUNT_ID get_device_metadata '{"registry_name":"REGISTRY_N
 ```
 ### Set device metadata parameter 
 
-*It is important to know that **param and value** are **Strings**, so you can only input a param & value per function call.*
+*It is important to know that **parameter and value** are **Strings**, so you can only input a parameter & value per function call.*
 
 ```bash
 near call $CONTRACT_ACCOUNT_ID set_device_metadata_param '{"registry_name":"REGISTRY_NAME","device_name":"DEVICE_NAME","param":"METADATA_PARAMETER","value":"VALUE"}' --accountId $OWNER_ACCOUNT_ID
@@ -184,7 +184,7 @@ To run tests, run the following command
 ```bash
 cargo test 
   ```
-*Or go to the test code in lib.rs and press *Run test* if using vs code.*
+*Or go to the test code in lib.rs and press *Run test* if using Visual Studio Code.*
 
 ---
 ## Examples
@@ -251,4 +251,4 @@ https://explorer.testnet.near.org/transactions/DJMaTHFopcrGkWQW765Y8eceTbwPo6K58
 ---
 ## Support
 
-Reach out via [website](https://mexbalia.com/contact/) or send an email to [info@mexbalia.com](https://google.com)
+Reach out via [website](https://mexbalia.com/service-details.html) or send an email to [info@mexbalia.com](https://google.com)
