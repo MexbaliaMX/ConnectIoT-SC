@@ -251,4 +251,4 @@ https://explorer.testnet.near.org/transactions/DJMaTHFopcrGkWQW765Y8eceTbwPo6K58
 ---
 ## Support
 
-Reach out via [website](https://mexbalia.com/service-details.html) or send an email to [info@mexbalia.com](https://google.com)
+Reach out via [website](https://mexbalia.com/contact.html) or send an email to [info@mexbalia.com](https://google.com)
