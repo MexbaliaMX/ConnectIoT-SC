@@ -49,7 +49,7 @@ rustup target add wasm32-unknown-unknown
 3. Install Near-CLI
 
 ```bash
-npm i -g near-cli
+sudo npm i -g near-cli
  ```
 4. Create a Near testnet account in  (https://wallet.testnet.near.org/)
 
